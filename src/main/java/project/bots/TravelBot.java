@@ -3,10 +3,10 @@ package project.bots;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.api.methods.send.SendMessage;
-import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.exceptions.TelegramApiException;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import project.bots.model.CitiesRepo;
 
 @Component
@@ -15,25 +15,6 @@ public class TravelBot extends TelegramLongPollingBot {
 
     @Autowired
     private CitiesRepo citiesRepo;
-
-    /*private static volatile TelegramLongPollingBot INSTANCE = null;
-
-    private TravelBot(){
-    }
-
-    public static TelegramLongPollingBot getInstance() {
-        TelegramLongPollingBot travelBot = INSTANCE;
-        if (travelBot == null) {
-            synchronized (TravelBot.class) {
-                travelBot = INSTANCE;
-                if (travelBot == null) {
-                    INSTANCE = travelBot = new TravelBot();
-                }
-            }
-        }
-
-        return travelBot;
-    }*/
 
     @Override
     public void onUpdateReceived(Update update) {
@@ -59,23 +40,12 @@ public class TravelBot extends TelegramLongPollingBot {
         return "888571639:AAG5iAbCzFzjCtVUmA-X9iiSX6-X5lCCnck";
     }
 
-    public String input(String msg) {
-        try {
-            return search(msg);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "Такого города нет в базе";
-        }
-    }
-
-    public String search(String city){
+    private String input(String city) {
         String msg;
         try{
-            msg = citiesRepo.findById(2).get().getMessage();
-//            System.out.println(" ___ " + citiesRepo.findByCity(city).get());
-        } catch (NullPointerException e){
+            msg = citiesRepo.findByCity(city).get().getMessage();
+        } catch (Exception e){
             msg = "Такого города нет в БД";
-            System.out.println("___");
         }
         return msg;
     }
