@@ -21,7 +21,7 @@ public class TravelBot extends TelegramLongPollingBot {
         update.getUpdateId();
 
         SendMessage sendMessage = new SendMessage().setChatId(update.getMessage().getChatId());
-        sendMessage.setText(input(update.getMessage().getText()));
+        sendMessage.setText(genAnswer(update.getMessage().getText()));
         try {
             execute(sendMessage);
         } catch (TelegramApiException e) {
@@ -40,10 +40,14 @@ public class TravelBot extends TelegramLongPollingBot {
         return "888571639:AAG5iAbCzFzjCtVUmA-X9iiSX6-X5lCCnck";
     }
 
-    private String input(String city) {
+    private String genAnswer(String input) {
         String msg;
+        if(input.equals("/start")){
+            return "Привет!" +
+                    " Вводи любой город, и я подскажу тебе интересные места в нем.";
+        }
         try{
-            msg = citiesRepo.findByCity(city).get().getMessage();
+            msg = citiesRepo.findByCity(input).get().getMessage();
         } catch (Exception e){
             msg = "Такого города нет в БД";
         }
