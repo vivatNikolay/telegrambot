@@ -42,10 +42,16 @@ public class TravelBot extends TelegramLongPollingBot {
 
     private String genAnswer(String input) {
         String msg;
+
         if(input.equals("/start")){
             return "Привет!" +
                     " Вводи любой город, и я подскажу тебе интересные места в нем.";
         }
+
+        if(input.equals("/help")){
+            return "Введи город - узнай куда в нем сходить";
+        }
+
         try{
             msg = citiesRepo.findByCity(input).get().getMessage();
         } catch (Exception e){
